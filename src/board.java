@@ -13,8 +13,10 @@ public class board {
         player esimene = new player();
         player teine = new player();
 
-        uusdeck1._kaardid.get(1);
-        uusdeck2._kaardid.get(1);
+        uusdeck1.deal();
+        uusdeck2.deal();
+
+
 
         int kaartone  = uusdeck1._kaardid.get(1).kaardiv();
         int kaarttwo  = uusdeck2._kaardid.get(1).kaardiv();

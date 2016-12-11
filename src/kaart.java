@@ -1,15 +1,13 @@
 /**
  * Created by Taavi on 4.10.2016.
  */
-import javafx.scene.image.Image;
 
 public class kaart {
 
     private int _kaardivaartus;
     private int _mast;
-    private Image image;
 
-    public kaart (int kaardivaartus, int mast){
+    public kaart (int mast, int kaardivaartus){
 
         _kaardivaartus = kaardivaartus;
         _mast = mast;
@@ -25,9 +23,7 @@ public class kaart {
 
         return _mast;
     }
-    Image getImage() {
-        return image;
-    }
+
 
 
 

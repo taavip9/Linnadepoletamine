@@ -9,7 +9,7 @@ public class player {
 
     }
 
-    public boolean kasonplayer1 (){
-        return turn = true;
+    public boolean plrturn (){
+        return turn = !turn;
     }
 }
