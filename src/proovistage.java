@@ -3,13 +3,22 @@
  */
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +27,11 @@ import java.util.List;
 public class proovistage extends Application {
 
     boolean turn = true;
+    boolean clicked = true;
+    boolean clickable1 = false;
+    boolean clickable2 = false;
+    boolean clickable3 = false;
+    boolean clickable4 = false;
     int value1;
     int value2;
     kaart player1kaart;
@@ -26,14 +40,57 @@ public class proovistage extends Application {
     List<kaart> graveyard2 = new ArrayList<kaart>();
     List<kaart> storage = new ArrayList<kaart>();
     List<kaart> draw = new ArrayList<kaart>();
-    int j = 0;
+    int j;
+    int score1;
+    int score2;
 
 
     @Override
     public void start(Stage laud) {
 
-        Group root = new Group();
-        Scene stseen = new Scene(root, Color.DARKGREEN);
+        Pane game = new Pane();
+        Pane menu = new Pane();
+
+        Scene stseen = new Scene(game);
+        Scene mainmenu = new Scene(menu);
+        game.setStyle("-fx-background-color: darkgreen");
+        menu.setStyle("-fx-background-color: darkgreen");
+
+        Text heading = new Text();
+        heading.setText("Linnade poletamine!");
+        heading.setFont(Font.font("Baskerville Old Face", 130));
+        heading.setFill(Color.YELLOW);
+        heading.setTranslateY(200);
+        heading.setTranslateX(45);
+
+        Label player1score = new Label();
+        player1score.textProperty().bind(new SimpleIntegerProperty(score1).asString());
+        player1score.setFont(Font.font("Baskerville Old Face", 80));
+        player1score.setTextFill(Color.YELLOW);
+        player1score.setTranslateX(1000);
+
+        Label player2score = new Label();
+        player2score.textProperty().bind(new SimpleIntegerProperty(score2).asString());
+        player2score.setFont(Font.font("Baskerville Old Face", 80));
+        player2score.setTextFill(Color.YELLOW);
+        player2score.setTranslateX(1000);
+        player2score.setTranslateY(400);
+
+
+        Button start_game = new Button();
+        start_game.setText("Start Game!");
+        start_game.setMinSize(400, 100);
+        start_game.setTranslateX(380);
+        start_game.setTranslateY(300);
+
+        start_game.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                laud.setScene(stseen);
+            }
+        });
+
+        menu.getChildren().addAll(start_game, heading);
 
         List<Image> clubs = new ArrayList<Image>();
         clubs.add(new Image("kaardid/clubs/png/2 clubs.png"));
@@ -116,42 +173,163 @@ public class proovistage extends Application {
         ImageView iv13 = new ImageView(tuhi);
         ImageView iv14 = new ImageView(tuhi);
 
-
-
-            /*Kaartide image*/
-        iv1.setTranslateX(25);
-        iv1.setTranslateY(40);
-        iv2.setTranslateX(-80);
-        iv2.setTranslateY(450);
-
-            /*Alumised tühjad kohad*/
-        iv3.setTranslateX(80);
-        iv3.setTranslateY(450);
-        iv4.setTranslateX(100);
-        iv4.setTranslateY(450);
-        iv5.setTranslateX(120);
-        iv5.setTranslateY(450);
-        iv6.setTranslateX(140);
-        iv6.setTranslateY(450);
-
-            /*Ülemised tühjad kohad*/
-        iv8.setTranslateX(-540);
-        iv8.setTranslateY(40);
-        iv9.setTranslateX(-520);
-        iv9.setTranslateY(40);
-        iv10.setTranslateX(-500);
-        iv10.setTranslateY(40);
-        iv11.setTranslateX(-480);
-        iv11.setTranslateY(40);
-
-            /*Keskmised tühjad kohad*/
-        iv13.setTranslateX(-1000);
-        iv13.setTranslateY(240);
-        iv14.setTranslateX(-900);
-        iv14.setTranslateY(240);
-
         deck uusdeck1 = new deck();
         deck uusdeck2 = new deck();
+
+
+
+        stseen.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+
+
+                if (storage.size()==2){
+
+                    if (storage.get(0).kaardiv() > storage.get(1).kaardiv()) {
+                        graveyard1.add(storage.get(0));
+                        graveyard1.add(storage.get(1));
+                        storage.clear();
+                        score1 = graveyard1.size();
+                        player1score.textProperty().bind(new SimpleIntegerProperty(score1).asString());
+                        if(draw.size() > 0) {
+                            for (int h = 0; h < draw.size(); h++) {
+                                graveyard1.add(draw.get(h));
+
+                            }
+                            score1 = graveyard1.size();
+                            player1score.textProperty().bind(new SimpleIntegerProperty(score1).asString());
+                            draw.clear();
+                        }
+                        j++;
+
+
+                    } else if (storage.get(0).kaardiv() < storage.get(1).kaardiv()){
+                        graveyard2.add(storage.get(0));
+                        graveyard2.add(storage.get(1));
+                        storage.clear();
+                        score2 = graveyard2.size();
+                        player2score.textProperty().bind(new SimpleIntegerProperty(score2).asString());
+                        if(draw.size() > 0) {
+                            for (int h = 0; h < draw.size(); h++) {
+                                graveyard2.add(draw.get(h));
+
+                            }
+                            score2 = graveyard2.size();
+                            player2score.textProperty().bind(new SimpleIntegerProperty(score2).asString());
+                            draw.clear();
+                        }
+
+                        j++;
+                    } else {
+                        draw.add(storage.get(0));
+                        draw.add(storage.get(1));
+                        storage.clear();
+                        j++;
+                    }
+                    System.out.println(graveyard1.size() +"      "+graveyard2.size()+"       " +draw.size()+"   "+
+                            uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn);
+
+                }
+
+                if (uusdeck2._kaardid.isEmpty()){
+
+                    for(int a = 0; a != graveyard2.size(); a++ ){
+                        uusdeck2._kaardid.add(graveyard2.get(a));
+                        graveyard2.remove(a);
+
+                    }
+                    iv2.setImage(kaart);
+                }
+
+                if (uusdeck1._kaardid.isEmpty()){
+                    for(int a = 0; a != graveyard1.size(); a++ ){
+                        uusdeck1._kaardid.add(graveyard1.get(a));
+                        graveyard1.remove(a);
+
+                    }
+
+                    iv1.setImage(kaart);
+                }
+
+            }
+
+        });
+
+        iv1.getViewport();
+
+
+        iv1.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+
+
+                if (turn == true && j % 4 == 0 && clicked == true) {
+
+                    if (j != 0) {
+                        uusdeck1.remove();
+                    }
+
+                    if (uusdeck1._kaardid.size() == 4) {
+                        iv1.setImage(tuhi);
+                    } else {
+                        iv1.setImage(kaart);
+                    }
+
+                    iv8.setImage(kaart);
+                    iv9.setImage(kaart);
+                    iv10.setImage(kaart);
+                    iv11.setImage(kaart);
+                    clicked = false;
+                    clickable1 = true;
+                    clickable2 = true;
+                    clickable3 = true;
+                    clickable4 = true;
+
+                }
+                System.out.println(graveyard1.size() + "      " + graveyard2.size() + "       " + draw.size() + "   " +
+                        uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn);
+
+
+            }
+        });
+
+        iv2.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event) {
+                if (turn == false && j%4 == 0 && clicked == false) {
+
+
+                    if(j!=0){
+                        uusdeck2.remove();
+
+                    }
+
+                    if(uusdeck2._kaardid.size() == 4){
+                        iv2.setImage(tuhi);
+                    }else{
+                        iv2.setImage(kaart);
+                    }
+
+                    iv3.setImage(kaart);
+                    iv4.setImage(kaart);
+                    iv5.setImage(kaart);
+                    iv6.setImage(kaart);
+                    clicked = true;
+                    clickable1 = true;
+                    clickable2 = true;
+                    clickable3 = true;
+                    clickable4 = true;
+
+                }
+                System.out.println(graveyard1.size() +"      "+graveyard2.size()+"       " +draw.size()+"   "+
+                        uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn);
+
+
+
+            }
+        });
+
+
 
 
 
@@ -161,7 +339,7 @@ public class proovistage extends Application {
         iv8.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == true) {
+                if (turn == true && clickable1 == true) {
                     kaart card0 = uusdeck1._kaardid.get(0);
 
                     if (card0.mastiv() == 1) {
@@ -180,9 +358,9 @@ public class proovistage extends Application {
                     value1 = card0.kaardiv();
                     storage.add(card0);
                     player1kaart = card0;
-                    System.out.println(storage.size());
                     turn = false;
                     iv14.setImage(tuhi);
+                    clickable1 = false;
                 }
             }
         });
@@ -190,7 +368,7 @@ public class proovistage extends Application {
         iv9.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == true) {
+                if (turn == true && clickable2 == true) {
                     kaart card1 = uusdeck1._kaardid.get(1);
                     if (card1.mastiv() == 1) {
                         iv13.setImage(clubs.get(card1.kaardiv()));
@@ -210,6 +388,7 @@ public class proovistage extends Application {
                     player1kaart = card1;
                     turn = false;
                     iv14.setImage(tuhi);
+                    clickable2 = false;
                 }
             }
         });
@@ -217,7 +396,7 @@ public class proovistage extends Application {
         iv10.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == true) {
+                if (turn == true && clickable3 == true) {
                     kaart card2 = uusdeck1._kaardid.get(2);
 
                     if (card2.mastiv() == 1) {
@@ -238,6 +417,7 @@ public class proovistage extends Application {
                     player1kaart = card2;
                     turn = false;
                     iv14.setImage(tuhi);
+                    clickable3 = false;
                 }
             }
         });
@@ -245,7 +425,7 @@ public class proovistage extends Application {
         iv11.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == true) {
+                if (turn == true && clickable4 == true) {
                     kaart card3 = uusdeck1._kaardid.get(3);
 
                     if (card3.mastiv() == 1) {
@@ -266,10 +446,10 @@ public class proovistage extends Application {
                     player1kaart = card3;
                     turn = false;
                     iv14.setImage(tuhi);
+                    clickable4 = false;
                 }
             }
         });
-
 
 
 
@@ -277,7 +457,7 @@ public class proovistage extends Application {
         iv3.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == false) {
+                if (turn == false && clickable1 == true) {
                     kaart card5 = uusdeck2._kaardid.get(0);
                     if (card5.mastiv() == 1) {
                         iv14.setImage(clubs.get(card5.kaardiv()));
@@ -296,6 +476,7 @@ public class proovistage extends Application {
                     storage.add(card5);
                     player2kaart = card5;
                     turn = true;
+                    clickable1 = false;
                 }
 
             }
@@ -304,7 +485,7 @@ public class proovistage extends Application {
         iv4.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == false) {
+                if (turn == false && clickable2 == true) {
                     kaart card6 = uusdeck2._kaardid.get(1);
                     if (card6.mastiv() == 1) {
                         iv14.setImage(clubs.get(card6.kaardiv()));
@@ -323,6 +504,7 @@ public class proovistage extends Application {
                     storage.add(card6);
                     player2kaart = card6;
                     turn = true;
+                    clickable2 = false;
                 }
 
             }
@@ -331,7 +513,7 @@ public class proovistage extends Application {
         iv5.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == false) {
+                if (turn == false && clickable3 == true) {
                     kaart card7 = uusdeck2._kaardid.get(2);
                     if (card7.mastiv() == 1) {
                         iv14.setImage(clubs.get(card7.kaardiv()));
@@ -350,6 +532,7 @@ public class proovistage extends Application {
                     storage.add(card7);
                     player2kaart = card7;
                     turn = true;
+                    clickable3 = false;
                 }
 
             }
@@ -358,7 +541,7 @@ public class proovistage extends Application {
         iv6.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == false) {
+                if (turn == false && clickable4 == true) {
                     kaart card8 = uusdeck2._kaardid.get(3);
                     if (card8.mastiv() == 1) {
                         iv14.setImage(clubs.get(card8.kaardiv()));
@@ -377,106 +560,7 @@ public class proovistage extends Application {
                     storage.add(card8);
                     player2kaart = card8;
                     turn = true;
-                }
-
-            }
-        });
-
-
-
-
-
-        stseen.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
-            @Override
-            public void handle(javafx.scene.input.MouseEvent event) {
-                if (storage.size()==2){
-
-                    if (storage.get(0).kaardiv() > storage.get(1).kaardiv()) {
-                        graveyard1.add(storage.get(0));
-                        graveyard1.add(storage.get(1));
-                        storage.clear();
-                        if(draw.size() > 0) {
-                            for (int h = 0; h < draw.size(); h++) {
-                                graveyard1.add(draw.get(h));
-                            }
-                            draw.clear();
-                        }
-                        j++;
-                    } else if (storage.get(0).kaardiv() < storage.get(1).kaardiv()){
-                        graveyard2.add(storage.get(0));
-                        graveyard2.add(storage.get(1));
-                        storage.clear();
-                        if(draw.size() > 0) {
-                            for (int h = 0; h < draw.size(); h++) {
-                                graveyard2.add(draw.get(h));
-                            }
-                            draw.clear();
-                        }
-
-                        j++;
-                    } else {
-                        draw.add(storage.get(0));
-                        draw.add(storage.get(1));
-                        storage.clear();
-                        j++;
-                    }
-                    System.out.println(graveyard1.size() +"      "+graveyard2.size()+"       " +draw.size()+"     "+j+"       " +
-                            "       "+storage.size());
-
-                }
-
-            }
-
-        });
-
-
-        iv1.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
-            @Override
-            public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == true && j%4 == 0){
-
-                    if(j%4 == 0 && j!=0){
-                        uusdeck1.remove();
-                    }
-
-                    if(uusdeck1._kaardid.size() == 4){
-                        iv1.setImage(tuhi);
-                    }else{
-                        iv1.setImage(kaart);
-                    }
-
-
-                    iv8.setImage(kaart);
-                    iv9.setImage(kaart);
-                    iv10.setImage(kaart);
-                    iv11.setImage(kaart);
-                    turn = false;
-                }
-
-            }
-        });
-
-
-        iv2.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
-            @Override
-            public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == false && j%4 == 0) {
-
-                    if(j%4 == 0 && j!=0){
-                        uusdeck2.remove();
-                    }
-
-                    if(uusdeck2._kaardid.size() == 4){
-                        iv2.setImage(tuhi);
-                    }else{
-                        iv2.setImage(kaart);
-                    }
-
-                    iv3.setImage(kaart);
-                    iv4.setImage(kaart);
-                    iv5.setImage(kaart);
-                    iv6.setImage(kaart);
-                    turn = true;
+                    clickable4 = false;
                 }
 
             }
@@ -485,20 +569,31 @@ public class proovistage extends Application {
 
 
         HBox box = new HBox();
+        HBox box1 = new HBox();
+        HBox box2 = new HBox();
+        VBox decks = new VBox();
 
-        box.getChildren().add(iv1);
-        box.getChildren().add(iv2);
-        box.getChildren().add(iv3);
-        box.getChildren().add(iv4);
-        box.getChildren().add(iv5);
-        box.getChildren().add(iv6);
-        box.getChildren().add(iv8);
-        box.getChildren().add(iv9);
-        box.getChildren().add(iv10);
-        box.getChildren().add(iv11);
-        box.getChildren().add(iv13);
-        box.getChildren().add(iv14);
-        root.getChildren().add(box);
+        decks.setSpacing(240);
+        decks.setTranslateX(45);
+        decks.setTranslateY(45);
+
+        box.setSpacing(40);
+        box.setTranslateX(350);
+        box.setTranslateY(240);
+
+        box1.setSpacing(10);
+        box1.setTranslateX(250);
+        box1.setTranslateY(450);
+
+        box2.setSpacing(10);
+        box2.setTranslateX(250);
+        box2.setTranslateY(45);
+
+        decks.getChildren().addAll(iv1, iv2);
+        box1.getChildren().addAll(iv3, iv4, iv5, iv6);
+        box2.getChildren().addAll(iv8, iv9, iv10, iv11);
+        box.getChildren().addAll(iv13, iv14);
+        game.getChildren().addAll(box, box1, box2, decks, player1score, player2score);
 
 
         laud.setTitle("Burn, baby burn");
