@@ -17,7 +17,6 @@ public class deck {
                 }
             }
 
-
             _kaardid = kaardid;
         }
 

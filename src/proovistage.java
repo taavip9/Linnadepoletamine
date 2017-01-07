@@ -28,10 +28,18 @@ public class proovistage extends Application {
 
     boolean turn = true;
     boolean clicked = true;
-    boolean clickable1 = false;
-    boolean clickable2 = false;
-    boolean clickable3 = false;
-    boolean clickable4 = false;
+
+    //Booleanid kontrollimaks kas player 1 kaarte on klikidud
+    boolean clickable1;
+    boolean clickable2;
+    boolean clickable3;
+    boolean clickable4;
+
+    //Booleanid kontrollimaks kas player 2 kaarte on klikidud
+    boolean clickable11;
+    boolean clickable22;
+    boolean clickable33;
+    boolean clickable44;
     int value1;
     int value2;
     kaart player1kaart;
@@ -226,8 +234,9 @@ public class proovistage extends Application {
                         storage.clear();
                         j++;
                     }
-                    System.out.println(graveyard1.size() +"      "+graveyard2.size()+"       " +draw.size()+"   "+
-                            uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn);
+                    System.out.println(graveyard1.size() + "      " + graveyard2.size() + "       " + draw.size() + "   " +
+                            uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn
+                            +"      " + clickable1 +"      " + clickable2 +"      " + clickable3 +"      " + clickable4 );
 
                 }
 
@@ -287,7 +296,8 @@ public class proovistage extends Application {
 
                 }
                 System.out.println(graveyard1.size() + "      " + graveyard2.size() + "       " + draw.size() + "   " +
-                        uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn);
+                        uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn
+                +"      " + clickable1 +"      " + clickable2 +"      " + clickable3 +"      " + clickable4 );
 
 
             }
@@ -315,14 +325,15 @@ public class proovistage extends Application {
                     iv5.setImage(kaart);
                     iv6.setImage(kaart);
                     clicked = true;
-                    clickable1 = true;
-                    clickable2 = true;
-                    clickable3 = true;
-                    clickable4 = true;
+                    clickable11 = true;
+                    clickable22 = true;
+                    clickable33 = true;
+                    clickable44 = true;
 
                 }
-                System.out.println(graveyard1.size() +"      "+graveyard2.size()+"       " +draw.size()+"   "+
-                        uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn);
+                System.out.println(graveyard1.size() + "      " + graveyard2.size() + "       " + draw.size() + "   " +
+                        uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn
+                        +"      " + clickable1 +"      " + clickable2 +"      " + clickable3 +"      " + clickable4 );
 
 
 
@@ -457,7 +468,7 @@ public class proovistage extends Application {
         iv3.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == false && clickable1 == true) {
+                if (turn == false && clickable11 == true) {
                     kaart card5 = uusdeck2._kaardid.get(0);
                     if (card5.mastiv() == 1) {
                         iv14.setImage(clubs.get(card5.kaardiv()));
@@ -476,7 +487,7 @@ public class proovistage extends Application {
                     storage.add(card5);
                     player2kaart = card5;
                     turn = true;
-                    clickable1 = false;
+                    clickable11 = false;
                 }
 
             }
@@ -485,7 +496,7 @@ public class proovistage extends Application {
         iv4.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == false && clickable2 == true) {
+                if (turn == false && clickable22 == true) {
                     kaart card6 = uusdeck2._kaardid.get(1);
                     if (card6.mastiv() == 1) {
                         iv14.setImage(clubs.get(card6.kaardiv()));
@@ -504,7 +515,7 @@ public class proovistage extends Application {
                     storage.add(card6);
                     player2kaart = card6;
                     turn = true;
-                    clickable2 = false;
+                    clickable22 = false;
                 }
 
             }
@@ -513,7 +524,7 @@ public class proovistage extends Application {
         iv5.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == false && clickable3 == true) {
+                if (turn == false && clickable33 == true) {
                     kaart card7 = uusdeck2._kaardid.get(2);
                     if (card7.mastiv() == 1) {
                         iv14.setImage(clubs.get(card7.kaardiv()));
@@ -532,7 +543,7 @@ public class proovistage extends Application {
                     storage.add(card7);
                     player2kaart = card7;
                     turn = true;
-                    clickable3 = false;
+                    clickable33 = false;
                 }
 
             }
@@ -541,7 +552,7 @@ public class proovistage extends Application {
         iv6.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (turn == false && clickable4 == true) {
+                if (turn == false && clickable44 == true) {
                     kaart card8 = uusdeck2._kaardid.get(3);
                     if (card8.mastiv() == 1) {
                         iv14.setImage(clubs.get(card8.kaardiv()));
@@ -560,7 +571,7 @@ public class proovistage extends Application {
                     storage.add(card8);
                     player2kaart = card8;
                     turn = true;
-                    clickable4 = false;
+                    clickable44 = false;
                 }
 
             }
