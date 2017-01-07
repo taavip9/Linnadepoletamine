@@ -24,7 +24,4 @@ public class kaart {
         return _mast;
     }
 
-
-
-
 }
