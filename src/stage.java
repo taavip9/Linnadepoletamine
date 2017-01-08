@@ -18,13 +18,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class stage extends Application {
 
-    //Booleanid kontrollimaks kumma playeri kord on
+    //Booleanid kontrollimaks millise playeri kord on
     boolean turn = true;
 
     //Booleanid kontrollimaks kas player 1 kaarte on klikidud
@@ -38,8 +39,6 @@ public class stage extends Application {
     boolean clickable22;
     boolean clickable33;
     boolean clickable44;
-    int value1;
-    int value2;
 
     //Graveyardid
     List<kaart> graveyard1 = new ArrayList<kaart>();
@@ -48,7 +47,11 @@ public class stage extends Application {
     //Viigi puhul list kaartide hoidmiseks
     List<kaart> storage = new ArrayList<kaart>();
     List<kaart> draw = new ArrayList<kaart>();
+
+    //Counter kordade lugemiseks
     int j;
+
+    //Player 1 ja 2 skoorid
     int score1;
     int score2;
 
@@ -64,10 +67,12 @@ public class stage extends Application {
         Scene mainmenu = new Scene(menu);
         Scene endgm = new Scene(endgame);
 
+        //Steseenide background värvi määramine
         game.setStyle("-fx-background-color: darkgreen");
         menu.setStyle("-fx-background-color: darkgreen");
         endgame.setStyle("-fx-background-color: darkgreen");
 
+        //Tekstide loomine ja disain
         Text endgametext = new Text();
         endgametext.setFont(Font.font("Baskerville Old Face", 90));
         endgametext.setFill(Color.YELLOW);
@@ -94,7 +99,7 @@ public class stage extends Application {
         player2score.setTranslateX(1000);
         player2score.setTranslateY(400);
 
-
+        //Nuppude loomine ja disain
         Button start_game = new Button();
         start_game.setText("Start Game!");
         start_game.setMinSize(400, 100);
@@ -107,13 +112,9 @@ public class stage extends Application {
         bck_strt_mnu.setTranslateX(380);
         bck_strt_mnu.setTranslateY(300);
 
-        start_game.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
 
-                laud.setScene(stseen);
-            }
-        });
+
+        //ArrayListid kaartide piltide hoidmiseks
 
         List<Image> clubs = new ArrayList<Image>();
         clubs.add(new Image("kaardid/clubs/png/2 clubs.png"));
@@ -179,36 +180,27 @@ public class stage extends Application {
         Image kaart = new Image("kaardid/tagus.png");
         Image tuhi = new Image("kaardid/emptyspace.png");
 
+        /*top_kaardid(0) - (3) on ülemised mängitavad kaardid (Player 1)*/
         List<ImageView> bot_kaardid = new ArrayList<ImageView>();
-        bot_kaardid.add(new ImageView(kaart));
-        bot_kaardid.add(new ImageView(kaart));
-        bot_kaardid.add(new ImageView(kaart));
-        bot_kaardid.add(new ImageView(kaart));
+        bot_kaardid.add(new ImageView(tuhi));
+        bot_kaardid.add(new ImageView(tuhi));
+        bot_kaardid.add(new ImageView(tuhi));
+        bot_kaardid.add(new ImageView(tuhi));
 
+        /*bot_kaardid(0) - (3) on alumised mängitavad kaardid (Player 2)*/
         List<ImageView> top_kaardid = new ArrayList<ImageView>();
-        top_kaardid.add(new ImageView(kaart));
-        top_kaardid.add(new ImageView(kaart));
-        top_kaardid.add(new ImageView(kaart));
-        top_kaardid.add(new ImageView(kaart));
-
-        top_kaardid.get(0).setImage(tuhi);
-        top_kaardid.get(1).setImage(tuhi);
-        top_kaardid.get(2).setImage(tuhi);
-        top_kaardid.get(3).setImage(tuhi);
-
-        bot_kaardid.get(0).setImage(tuhi);
-        bot_kaardid.get(1).setImage(tuhi);
-        bot_kaardid.get(2).setImage(tuhi);
-        bot_kaardid.get(3).setImage(tuhi);
+        top_kaardid.add(new ImageView(tuhi));
+        top_kaardid.add(new ImageView(tuhi));
+        top_kaardid.add(new ImageView(tuhi));
+        top_kaardid.add(new ImageView(tuhi));
 
         /*ImageView-d kaardipakkide jaoks*/
+        ImageView deck1_IV = new ImageView(kaart);
+        ImageView deck2_IV = new ImageView(kaart);
 
-        ImageView iv1 = new ImageView(kaart);
-        ImageView iv2 = new ImageView(kaart);
-
-
-        ImageView iv13 = new ImageView(tuhi);
-        ImageView iv14 = new ImageView(tuhi);
+        //ImageView-d kahe keskmise mängitava kaardi jaoks
+        ImageView player1_crd_IV = new ImageView(tuhi);
+        ImageView player2_crd_IV = new ImageView(tuhi);
 
         /*Kaardipakkide loomine ja segamine*/
         deck uusdeck1 = new deck();
@@ -217,6 +209,51 @@ public class stage extends Application {
         uusdeck2.shuffle();
 
 
+        HBox box = new HBox(); // HBox kahe keskmise kaardi jaoks
+        HBox box1 = new HBox(); // HBox alumiste mängitavate kaartide jaoks
+        HBox box2 = new HBox(); // HBox ülemiste mängitavate kaartide jaoks
+        VBox decks = new VBox(); // VBox kaardipakkide jaosk
+
+        decks.setSpacing(240);
+        decks.setTranslateX(45);
+        decks.setTranslateY(45);
+
+        box.setSpacing(40);
+        box.setTranslateX(350);
+        box.setTranslateY(240);
+
+        box1.setSpacing(10);
+        box1.setTranslateX(250);
+        box1.setTranslateY(450);
+
+        box2.setSpacing(10);
+        box2.setTranslateX(250);
+        box2.setTranslateY(45);
+
+        decks.getChildren().addAll(deck1_IV, deck2_IV);
+        box1.getChildren().addAll(bot_kaardid.get(0), bot_kaardid.get(1), bot_kaardid.get(2), bot_kaardid.get(3));
+        box2.getChildren().addAll(top_kaardid.get(0), top_kaardid.get(1), top_kaardid.get(2), top_kaardid.get(3));
+        box.getChildren().addAll(player1_crd_IV, player2_crd_IV);
+        game.getChildren().addAll(box, box1, box2, decks, player1score, player2score);
+        menu.getChildren().addAll(start_game, heading);
+        endgame.getChildren().addAll(endgametext, bck_strt_mnu);
+
+
+        laud.setTitle("Burn, baby burn");
+        laud.setWidth(1200);
+        laud.setHeight(700);
+        laud.setScene(mainmenu);
+        laud.show();
+
+        //Nupp mängu alustamiseks main menüüs
+        start_game.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                laud.setScene(stseen);
+            }
+        });
+
+        //Nupp viib võidu korral tagasi peamenüüsse ja resettib kõik mängu parameetrid uue mängu jaoks
         bck_strt_mnu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -261,11 +298,11 @@ public class stage extends Application {
                 bot_kaardid.get(2).setImage(tuhi);
                 bot_kaardid.get(3).setImage(tuhi);
 
-                iv1.setImage(kaart);
-                iv2.setImage(kaart);
+                deck1_IV.setImage(kaart);
+                deck2_IV.setImage(kaart);
 
-                iv13.setImage(tuhi);
-                iv14.setImage(tuhi);
+                player1_crd_IV.setImage(tuhi);
+                player2_crd_IV.setImage(tuhi);
 
                 player1score.textProperty().bind(new SimpleIntegerProperty(0).asString());
                 player2score.textProperty().bind(new SimpleIntegerProperty(0).asString());
@@ -273,16 +310,16 @@ public class stage extends Application {
             }
         });
 
-
+        //Üldised muutujad, mida kontrollitakse iga klicki ajal
         stseen.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
 
-                if (score1 >= 6) {
+                //100 punkti juures mäng võidetakse
+                if (score1 >= 100) {
                     laud.setScene(endgm);
                     endgametext.setText("Player 1 won, congratulations!");
-                }
-                else if (score2 >= 6) {
+                } else if (score2 >= 100) {
                     laud.setScene(endgm);
                     endgametext.setText("Player 2 won, congratulations!");
 
@@ -291,6 +328,7 @@ public class stage extends Application {
 
                     if (storage.size() == 2) {
 
+                        //Player 1 ja 2 mängitud kaarte võrreldakse ja lisatakse võitja graveyardi ning skoori hulka
                         if (storage.get(0).kaardiv() > storage.get(1).kaardiv()) {
                             graveyard1.add(storage.get(0));
                             graveyard1.add(storage.get(1));
@@ -334,12 +372,10 @@ public class stage extends Application {
                             storage.clear();
                             j++;
                         }
-                        System.out.println(graveyard1.size() + "      " + graveyard2.size() + "       " + draw.size() + "   " +
-                                uusdeck1._kaardid.size() + "            " + uusdeck2._kaardid.size() + "      " + j + "     " + turn
-                                + "      " + clickable1 + "      " + clickable2 + "      " + clickable3 + "      " + clickable4);
-
                     }
 
+                    /*Kontroll kas palyeri kaartipakk on tühjaks saanud; kui on, siis võetakse playeri graveyard,
+                    * lisatakse see playeri uueks kaardipakiks ja tühjendatakse*/
                     if (uusdeck2._kaardid.isEmpty()) {
 
                         for (int a = 0; graveyard2.size() > 0; a++) {
@@ -347,7 +383,6 @@ public class stage extends Application {
                             graveyard2.remove(0);
 
                         }
-                        iv2.setImage(kaart);
                     }
 
                     if (uusdeck1._kaardid.isEmpty()) {
@@ -356,8 +391,6 @@ public class stage extends Application {
                             graveyard1.remove(0);
 
                         }
-
-                        iv1.setImage(kaart);
                     }
                 }
 
@@ -365,30 +398,13 @@ public class stage extends Application {
 
         });
 
-        iv1.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+        //Player 1 kaardipakk
+        deck1_IV.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
 
 
-                if (turn == true && j%4 == 0) {
-
-                    if (uusdeck1._kaardid.size() == 3){
-                        clickable4 = false;
-                        top_kaardid.get(3).setImage(tuhi);
-                    } else if (uusdeck1._kaardid.size() == 2){
-                        clickable3 = false;
-                        clickable4 = false;
-                        top_kaardid.get(2).setImage(tuhi);
-                        top_kaardid.get(3).setImage(tuhi);
-
-                    } else if (uusdeck1._kaardid.size() == 1){
-                        clickable2 = false;
-                        clickable3 = false;
-                        clickable4 = false;
-                        top_kaardid.get(1).setImage(tuhi);
-                        top_kaardid.get(2).setImage(tuhi);
-                        top_kaardid.get(3).setImage(tuhi);
-                    }
+                if (turn == true && j % 4 == 0) {
 
                     top_kaardid.get(0).setImage(kaart);
                     top_kaardid.get(1).setImage(kaart);
@@ -400,37 +416,14 @@ public class stage extends Application {
                     clickable4 = true;
 
                 }
-                System.out.println(graveyard1.size() + "      " + graveyard2.size() + "       " + draw.size() + "   " +
-                        uusdeck1._kaardid.size()+ "            "+ uusdeck2._kaardid.size()+ "      " + j+"     " + turn
-                +"      " + clickable1 +"      " + clickable2 +"      " + clickable3 +"      " + clickable4 );
-
-
             }
         });
 
-        iv2.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+        //Player 2 kaardipakk
+        deck2_IV.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (turn == false && j % 4 == 0) {
-
-
-                    if (uusdeck2._kaardid.size() == 3) {
-                        clickable4 = true;
-                        bot_kaardid.get(3).setImage(tuhi);
-                    } else if (uusdeck2._kaardid.size() == 2) {
-                        clickable3 = true;
-                        clickable4 = true;
-                        bot_kaardid.get(2).setImage(tuhi);
-                        bot_kaardid.get(3).setImage(tuhi);
-
-                    } else if (uusdeck2._kaardid.size() == 1) {
-                        clickable2 = true;
-                        clickable3 = true;
-                        clickable4 = true;
-                        bot_kaardid.get(1).setImage(tuhi);
-                        bot_kaardid.get(2).setImage(tuhi);
-                        bot_kaardid.get(3).setImage(tuhi);
-                    }
 
                     bot_kaardid.get(0).setImage(kaart);
                     bot_kaardid.get(1).setImage(kaart);
@@ -442,16 +435,11 @@ public class stage extends Application {
                     clickable44 = true;
 
                 }
-                System.out.println(graveyard1.size() + "      " + graveyard2.size() + "       " + draw.size() + "   " +
-                        uusdeck1._kaardid.size() + "            " + uusdeck2._kaardid.size() + "      " + j + "     " + turn
-                        + "      " + clickable11 + "      " + clickable22 + "      " + clickable33 + "      " + clickable44);
-
-
             }
         });
 
 
-            /*ülemised tühjad kohad clickides iv.8-12*/
+        /*top_kaardid(0) - (3) on ülemised mängitavad kaardid (Player 1)*/
 
         top_kaardid.get(0).setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
@@ -460,22 +448,21 @@ public class stage extends Application {
                     kaart card0 = uusdeck1._kaardid.get(0);
 
                     if (card0.mastiv() == 1) {
-                        iv13.setImage(clubs.get(card0.kaardiv()));
+                        player1_crd_IV.setImage(clubs.get(card0.kaardiv()));
                     }
                     if (card0.mastiv() == 2) {
-                        iv13.setImage(diamonds.get(card0.kaardiv()));
+                        player1_crd_IV.setImage(diamonds.get(card0.kaardiv()));
                     }
                     if (card0.mastiv() == 3) {
-                        iv13.setImage(hearts.get(card0.kaardiv()));
+                        player1_crd_IV.setImage(hearts.get(card0.kaardiv()));
                     }
                     if (card0.mastiv() == 4) {
-                        iv13.setImage(spades.get(card0.kaardiv()));
+                        player1_crd_IV.setImage(spades.get(card0.kaardiv()));
                     }
                     top_kaardid.get(0).setImage(tuhi);
-                    value1 = card0.kaardiv();
                     storage.add(card0);
                     turn = false;
-                    iv14.setImage(tuhi);
+                    player2_crd_IV.setImage(tuhi);
                     uusdeck1._kaardid.remove(0);
                     clickable1 = false;
                 }
@@ -487,29 +474,28 @@ public class stage extends Application {
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (turn == true && clickable2 == true) {
 
-                        kaart card1 = uusdeck1._kaardid.get(0);
-                        if (card1.mastiv() == 1) {
-                            iv13.setImage(clubs.get(card1.kaardiv()));
-                        }
-                        if (card1.mastiv() == 2) {
-                            iv13.setImage(diamonds.get(card1.kaardiv()));
-                        }
-                        if (card1.mastiv() == 3) {
-                            iv13.setImage(hearts.get(card1.kaardiv()));
-                        }
-                        if (card1.mastiv() == 4) {
-                            iv13.setImage(spades.get(card1.kaardiv()));
-                        }
-                        top_kaardid.get(1).setImage(tuhi);
-                        value1 = card1.kaardiv();
-                        storage.add(card1);
-                        turn = false;
-                        iv14.setImage(tuhi);
-                        uusdeck1._kaardid.remove(0);
-                        clickable2 = false;
+                    kaart card1 = uusdeck1._kaardid.get(0);
+                    if (card1.mastiv() == 1) {
+                        player1_crd_IV.setImage(clubs.get(card1.kaardiv()));
                     }
+                    if (card1.mastiv() == 2) {
+                        player1_crd_IV.setImage(diamonds.get(card1.kaardiv()));
+                    }
+                    if (card1.mastiv() == 3) {
+                        player1_crd_IV.setImage(hearts.get(card1.kaardiv()));
+                    }
+                    if (card1.mastiv() == 4) {
+                        player1_crd_IV.setImage(spades.get(card1.kaardiv()));
+                    }
+                    top_kaardid.get(1).setImage(tuhi);
+                    storage.add(card1);
+                    turn = false;
+                    player2_crd_IV.setImage(tuhi);
+                    uusdeck1._kaardid.remove(0);
+                    clickable2 = false;
                 }
-            });
+            }
+        });
 
         top_kaardid.get(2).setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
@@ -517,83 +503,81 @@ public class stage extends Application {
                 if (turn == true && clickable3 == true) {
 
 
-                        kaart card2 = uusdeck1._kaardid.get(0);
+                    kaart card2 = uusdeck1._kaardid.get(0);
 
-                        if (card2.mastiv() == 1) {
-                            iv13.setImage(clubs.get(card2.kaardiv()));
-                        }
-                        if (card2.mastiv() == 2) {
-                            iv13.setImage(diamonds.get(card2.kaardiv()));
-                        }
-                        if (card2.mastiv() == 3) {
-                            iv13.setImage(hearts.get(card2.kaardiv()));
-                        }
-                        if (card2.mastiv() == 4) {
-                            iv13.setImage(spades.get(card2.kaardiv()));
-                        }
-                        top_kaardid.get(2).setImage(tuhi);
-                        value1 = card2.kaardiv();
-                        storage.add(card2);
-                        turn = false;
-                        iv14.setImage(tuhi);
-                        uusdeck1._kaardid.remove(0);
-                        clickable3 = false;
+                    if (card2.mastiv() == 1) {
+                        player1_crd_IV.setImage(clubs.get(card2.kaardiv()));
                     }
+                    if (card2.mastiv() == 2) {
+                        player1_crd_IV.setImage(diamonds.get(card2.kaardiv()));
+                    }
+                    if (card2.mastiv() == 3) {
+                        player1_crd_IV.setImage(hearts.get(card2.kaardiv()));
+                    }
+                    if (card2.mastiv() == 4) {
+                        player1_crd_IV.setImage(spades.get(card2.kaardiv()));
+                    }
+                    top_kaardid.get(2).setImage(tuhi);
+                    storage.add(card2);
+                    turn = false;
+                    player2_crd_IV.setImage(tuhi);
+                    uusdeck1._kaardid.remove(0);
+                    clickable3 = false;
                 }
-            });
+            }
+        });
 
         top_kaardid.get(3).setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (turn == true && clickable4 == true) {
 
-                        kaart card3 = uusdeck1._kaardid.get(0);
+                    kaart card3 = uusdeck1._kaardid.get(0);
 
-                        if (card3.mastiv() == 1) {
-                            iv13.setImage(clubs.get(card3.kaardiv()));
-                        }
-                        if (card3.mastiv() == 2) {
-                            iv13.setImage(diamonds.get(card3.kaardiv()));
-                        }
-                        if (card3.mastiv() == 3) {
-                            iv13.setImage(hearts.get(card3.kaardiv()));
-                        }
-                        if (card3.mastiv() == 4) {
-                            iv13.setImage(spades.get(card3.kaardiv()));
-                        }
-                        top_kaardid.get(3).setImage(tuhi);
-                        value1 = card3.kaardiv();
-                        storage.add(card3);
-                        turn = false;
-                        iv14.setImage(tuhi);
-                        uusdeck1._kaardid.remove(0);
-                        clickable4 = false;
+                    if (card3.mastiv() == 1) {
+                        player1_crd_IV.setImage(clubs.get(card3.kaardiv()));
                     }
+                    if (card3.mastiv() == 2) {
+                        player1_crd_IV.setImage(diamonds.get(card3.kaardiv()));
+                    }
+                    if (card3.mastiv() == 3) {
+                        player1_crd_IV.setImage(hearts.get(card3.kaardiv()));
+                    }
+                    if (card3.mastiv() == 4) {
+                        player1_crd_IV.setImage(spades.get(card3.kaardiv()));
+                    }
+                    top_kaardid.get(3).setImage(tuhi);
+                    storage.add(card3);
+                    turn = false;
+                    player2_crd_IV.setImage(tuhi);
+                    uusdeck1._kaardid.remove(0);
+                    clickable4 = false;
                 }
-            });
+            }
+        });
 
 
 
-            /*iv3-7 on alumised tühjad kohad*/
+        /*bot_kaardid(0) - (3) on alumised mängitavad kaardid (Player 2)*/
+
         bot_kaardid.get(0).setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (turn == false && clickable11 == true) {
                     kaart card5 = uusdeck2._kaardid.get(0);
                     if (card5.mastiv() == 1) {
-                        iv14.setImage(clubs.get(card5.kaardiv()));
+                        player2_crd_IV.setImage(clubs.get(card5.kaardiv()));
                     }
                     if (card5.mastiv() == 2) {
-                        iv14.setImage(diamonds.get(card5.kaardiv()));
+                        player2_crd_IV.setImage(diamonds.get(card5.kaardiv()));
                     }
                     if (card5.mastiv() == 3) {
-                        iv14.setImage(hearts.get(card5.kaardiv()));
+                        player2_crd_IV.setImage(hearts.get(card5.kaardiv()));
                     }
                     if (card5.mastiv() == 4) {
-                        iv14.setImage(spades.get(card5.kaardiv()));
+                        player2_crd_IV.setImage(spades.get(card5.kaardiv()));
                     }
                     bot_kaardid.get(0).setImage(tuhi);
-                    value2 = card5.kaardiv();
                     storage.add(card5);
                     turn = true;
                     uusdeck2._kaardid.remove(0);
@@ -608,124 +592,85 @@ public class stage extends Application {
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (turn == false && clickable22 == true) {
 
-                        kaart card6 = uusdeck2._kaardid.get(0);
-                        if (card6.mastiv() == 1) {
-                            iv14.setImage(clubs.get(card6.kaardiv()));
-                        }
-                        if (card6.mastiv() == 2) {
-                            iv14.setImage(diamonds.get(card6.kaardiv()));
-                        }
-                        if (card6.mastiv() == 3) {
-                            iv14.setImage(hearts.get(card6.kaardiv()));
-                        }
-                        if (card6.mastiv() == 4) {
-                            iv14.setImage(spades.get(card6.kaardiv()));
-                        }
-                        bot_kaardid.get(1).setImage(tuhi);
-                        value2 = card6.kaardiv();
-                        storage.add(card6);
-                        turn = true;
-                        uusdeck2._kaardid.remove(0);
-                        clickable22 = false;
+                    kaart card6 = uusdeck2._kaardid.get(0);
+                    if (card6.mastiv() == 1) {
+                        player2_crd_IV.setImage(clubs.get(card6.kaardiv()));
                     }
-
+                    if (card6.mastiv() == 2) {
+                        player2_crd_IV.setImage(diamonds.get(card6.kaardiv()));
+                    }
+                    if (card6.mastiv() == 3) {
+                        player2_crd_IV.setImage(hearts.get(card6.kaardiv()));
+                    }
+                    if (card6.mastiv() == 4) {
+                        player2_crd_IV.setImage(spades.get(card6.kaardiv()));
+                    }
+                    bot_kaardid.get(1).setImage(tuhi);
+                    storage.add(card6);
+                    turn = true;
+                    uusdeck2._kaardid.remove(0);
+                    clickable22 = false;
                 }
-            });
+
+            }
+        });
 
         bot_kaardid.get(2).setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (turn == false && clickable33 == true) {
 
-                        kaart card7 = uusdeck2._kaardid.get(0);
-                        if (card7.mastiv() == 1) {
-                            iv14.setImage(clubs.get(card7.kaardiv()));
-                        }
-                        if (card7.mastiv() == 2) {
-                            iv14.setImage(diamonds.get(card7.kaardiv()));
-                        }
-                        if (card7.mastiv() == 3) {
-                            iv14.setImage(hearts.get(card7.kaardiv()));
-                        }
-                        if (card7.mastiv() == 4) {
-                            iv14.setImage(spades.get(card7.kaardiv()));
-                        }
-                        bot_kaardid.get(2).setImage(tuhi);
-                        value2 = card7.kaardiv();
-                        storage.add(card7);
-                        turn = true;
-                        uusdeck2._kaardid.remove(0);
-                        clickable33 = false;
+                    kaart card7 = uusdeck2._kaardid.get(0);
+                    if (card7.mastiv() == 1) {
+                        player2_crd_IV.setImage(clubs.get(card7.kaardiv()));
                     }
-
+                    if (card7.mastiv() == 2) {
+                        player2_crd_IV.setImage(diamonds.get(card7.kaardiv()));
+                    }
+                    if (card7.mastiv() == 3) {
+                        player2_crd_IV.setImage(hearts.get(card7.kaardiv()));
+                    }
+                    if (card7.mastiv() == 4) {
+                        player2_crd_IV.setImage(spades.get(card7.kaardiv()));
+                    }
+                    bot_kaardid.get(2).setImage(tuhi);
+                    storage.add(card7);
+                    turn = true;
+                    uusdeck2._kaardid.remove(0);
+                    clickable33 = false;
                 }
-            });
+
+            }
+        });
 
         bot_kaardid.get(3).setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (turn == false && clickable44 == true) {
 
-                        kaart card8 = uusdeck2._kaardid.get(0);
-                        if (card8.mastiv() == 1) {
-                            iv14.setImage(clubs.get(card8.kaardiv()));
-                        }
-                        if (card8.mastiv() == 2) {
-                            iv14.setImage(diamonds.get(card8.kaardiv()));
-                        }
-                        if (card8.mastiv() == 3) {
-                            iv14.setImage(hearts.get(card8.kaardiv()));
-                        }
-                        if (card8.mastiv() == 4) {
-                            iv14.setImage(spades.get(card8.kaardiv()));
-                        }
-                        bot_kaardid.get(3).setImage(tuhi);
-                        value2 = card8.kaardiv();
-                        storage.add(card8);
-                        turn = true;
-                        uusdeck2._kaardid.remove(0);
-                        clickable44 = false;
+                    kaart card8 = uusdeck2._kaardid.get(0);
+                    if (card8.mastiv() == 1) {
+                        player2_crd_IV.setImage(clubs.get(card8.kaardiv()));
                     }
-
+                    if (card8.mastiv() == 2) {
+                        player2_crd_IV.setImage(diamonds.get(card8.kaardiv()));
+                    }
+                    if (card8.mastiv() == 3) {
+                        player2_crd_IV.setImage(hearts.get(card8.kaardiv()));
+                    }
+                    if (card8.mastiv() == 4) {
+                        player2_crd_IV.setImage(spades.get(card8.kaardiv()));
+                    }
+                    bot_kaardid.get(3).setImage(tuhi);
+                    storage.add(card8);
+                    turn = true;
+                    uusdeck2._kaardid.remove(0);
+                    clickable44 = false;
                 }
-            });
+
+            }
+        });
 
 
-
-        HBox box = new HBox();
-        HBox box1 = new HBox();
-        HBox box2 = new HBox();
-        VBox decks = new VBox();
-
-        decks.setSpacing(240);
-        decks.setTranslateX(45);
-        decks.setTranslateY(45);
-
-        box.setSpacing(40);
-        box.setTranslateX(350);
-        box.setTranslateY(240);
-
-        box1.setSpacing(10);
-        box1.setTranslateX(250);
-        box1.setTranslateY(450);
-
-        box2.setSpacing(10);
-        box2.setTranslateX(250);
-        box2.setTranslateY(45);
-
-        decks.getChildren().addAll(iv1, iv2);
-        box1.getChildren().addAll(bot_kaardid.get(0), bot_kaardid.get(1), bot_kaardid.get(2), bot_kaardid.get(3));
-        box2.getChildren().addAll(top_kaardid.get(0), top_kaardid.get(1), top_kaardid.get(2), top_kaardid.get(3));
-        box.getChildren().addAll(iv13, iv14);
-        game.getChildren().addAll(box, box1, box2, decks, player1score, player2score);
-        menu.getChildren().addAll(start_game, heading);
-        endgame.getChildren().addAll(endgametext, bck_strt_mnu);
-
-
-        laud.setTitle("Burn, baby burn");
-        laud.setWidth(1200);
-        laud.setHeight(700);
-        laud.setScene(mainmenu);
-        laud.show();
     }
 }

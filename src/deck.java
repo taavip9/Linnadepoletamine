@@ -1,8 +1,6 @@
 import java.util.*;
 
-/**
- * Created by Taavi on 4.10.2016.
- */
+//Deck class
 public class deck {
 
         List<kaart> _kaardid;
@@ -10,6 +8,8 @@ public class deck {
     public deck(){
         List<kaart> kaardid = new ArrayList<kaart>();
 
+            /*Deck-i loomine 2 "for" tsükli abil, esimne loob neli erinevat masti ning teine erinevad kaardid, kokku
+            52 erinevat kaarti*/
             for ( int rmast = 1; rmast <= 4; rmast++ ) {
                 for ( int rmvaart = 0; rmvaart <= 12; rmvaart++ ) {
                     kaardid.add(new kaart(rmast, rmvaart));
@@ -27,6 +27,7 @@ public class deck {
     }
 
     public void reset(){
+
         _kaardid.clear();
 
         List<kaart> kaardid = new ArrayList<kaart>();

@@ -1,12 +1,10 @@
-/**
- * Created by Taavi on 4.10.2016.
- */
-
+//Class Kaart
 public class kaart {
 
     private int _kaardivaartus;
     private int _mast;
 
+    //Loodavalt kaardile antakse mast ja suurus
     public kaart (int mast, int kaardivaartus){
 
         _kaardivaartus = kaardivaartus;
