@@ -1,8 +1,8 @@
 # Linnadepoletamine
 
-Loodud projekti nimi on Linnadepõletamine
+Loodud projekti nimi on Linnade põletamine
 
-Projekti käigus loodi kaardimäng, mis on modifitseeritud versioon kaardimängust Linnadepõletamine.
+Projekti käigus loodi kaardimäng, mis on modifitseeritud versioon kaardimängust Linnade põletamine.
 
 Reeglid:
 
