@@ -30,4 +30,4 @@ Kaartide käimise järjekord on:
 5. Playerid käivad kordamööda kuni kõik 4 kaarti on mängitud, pärast mida tõmbavad nad uued 4 kaarti
 
 
-Litsenti pole, mäng ja kood on kõigile vabaks kasutamiseks
+Litsentsi pole, mäng ja kood on kõigile vabaks kasutamiseks
